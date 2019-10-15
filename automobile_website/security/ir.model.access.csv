@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_frame_detail_data,access_frame_detail_data,model_frame_detail_data,base.group_user,1,0,0,0
+access_category_image_html,access_category_image_html,model_category_image_html,base.group_user,1,0,0,0
+access_reference_url,access_reference_url,model_reference_url,base.group_user,1,0,0,0
+access_product_image_create,access_product_image_create,model_product_image_create,base.group_user,1,0,0,0
+access_row_category_data,access_row_category_data,model_row_category_data,base.group_user,1,0,0,0

@@ -1,0 +1,1130 @@
+<odoo>
+
+    <record id="website_sale.menu_shop" model="website.menu">
+        <field name="name">Catalog of Parts</field>
+        <field name="url">/shop</field>
+        <field name="parent_id" ref="website.main_menu"/>
+        <field name="sequence" type="int">20</field>
+    </record>
+
+
+    <template id="assets_frontend" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/automobile_website/static/src/js/main.js"/>
+            <script type="text/javascript" src="/automobile_website/static/src/js/datepicker.js"/>
+            <link rel="stylesheet" href="/automobile_website/static/src/css/main.css"/>
+        </xpath>
+    </template>
+
+
+    <template id="automobile_dropdown_layout" inherit_id="portal.frontend_layout">
+        <xpath expr="//header//ul[@id='top_menu']/li[hasclass('dropdown')]" position="attributes">
+            <attribute name="style">display:none;</attribute>
+        </xpath>
+    </template>
+
+    <!-- Top header -->
+    <template id="theme_automobile_header_layout" inherit_id="website.layout" name="Top Header">
+        <xpath expr="//div[@id='wrapwrap']//header//div[hasclass('container')]" position="before">
+            <div class="header-nav">
+                <div class="container">
+                    <div class="collapse navbar-collapse navbar-top-collapse">
+                    </div>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[@id='wrapwrap']//header//div[hasclass('header-nav')]" position="before">
+            <div class="header-top" style="width: 100%;float: left;">
+                <div class="ht-top"
+                     style="width: 100%;float: left;background: black;color: white;padding:5px;height:30px;">
+                    <ul style="list-style: none;width: auto;padding-right: 60px;float: left;margin: 0;position: absolute;right:0px;">
+                        <t t-if="website.user_id != user_id">
+                            <li style="width: auto;float: left;margin-left: 15px;color: white;">Welcome,
+                                <b>
+                                    <t t-esc="user_id.name"/>,
+                                </b>
+                            </li>
+                            <li style="width: auto;float: left;margin-left: 15px;">
+                                <a href="/my/home" style="color: white;">My account</a>
+                            </li>
+                            <li style="width: auto;float: left;margin-left: 15px;">
+                                <a role="menuitem" style="color: white;" t-attf-href="/web/session/logout?redirect=/">
+                                    Logout
+                                </a>
+                            </li>
+                        </t>
+                        <t t-if="website.user_id == user_id">
+                            <li style="width: auto;float: left;margin-left: 15px;">
+                                <a href="/web/login" style="color: white;">SignIn</a>
+                            </li>
+                            <li style="width: auto;float: left;margin-left: 15px;">
+                                <a href="/web/signup" style="color: white;">SignUp</a>
+                            </li>
+                        </t>
+                    </ul>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Homepage Design -->
+    <template id="automobile_home_page1">
+        <t t-call="website.layout">
+            <div id="wrap" class="js_sale">
+                <div class="oe_structure"/>
+                <div class="col-md-12" id="search-panel">
+                    <div class="container">
+                        <div class="row">
+                            <form method="get" action="/search">
+                                <div class="col-md-2">
+                                    <!-- <t t-set="cars"
+                                       t-value="request.env['product.public.category'].sudo().search([('is_a_car', '=', True)])"/> -->
+                                    <div class="form-group">
+                                        <select id="car_selection" name="car_selection" class="form-control" placeholder="Cars">
+                                            <option value="">Select Cars</option>
+                                            <t t-foreach="model_list" t-as="car">
+                                                <option t-att-value="car">
+                                                    <t t-esc="car"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <select id="grade_selection" name="grade_selection" class="form-control">
+                                            <option value="">Select Grade</option>
+                                            <t t-foreach="grade_list" t-as="g">
+                                                <option t-att-value="g">
+                                                    <t t-esc="g"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <t t-set="years"
+                                       t-value="request.env['product.public.category'].sudo().get_year_list()"/>
+                                    <div class="form-group">
+                                        <select id="year_selection" name="year_selection" class="form-control">
+                                            <option value="">year</option>
+                                            <t t-foreach="years" t-as="year">
+                                                <option t-att-value="year">
+                                                    <t t-esc="year"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+<!--                                     <t t-set="engines"
+                                       t-value="request.env['product.public.category'].sudo().get_engine_list()"/> -->
+                                    <t t-set="engines" t-value="engine_list"/>
+                                    <div class="form-group">
+                                        <select id="engine_selection" name="engine_selection" class="form-control">
+                                            <option value="">Engine</option>
+                                            <t t-foreach="engines" t-as="engine">
+                                                <option t-att-value="engine">
+                                                    <t t-esc="engine"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <!-- <t t-set="products"
+                                       t-value="request.env['product.template'].sudo().search([])"/> -->
+                                    <t t-set="products"
+                                       t-value="product_list"/>
+                                    <div class="form-group">
+                                        <select id="product_selection" name="product_selection" class="form-control">
+                                            <option value="">Product Selection</option>
+                                            <t t-foreach="products" t-as="product">
+                                                <option t-att-value="product.id">
+                                                    <t t-esc="product.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" type="submit" id="search_number_1">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <form method="get" action="/search">
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <input type="text" id="search_frame_no"
+                                                placeholder="Search by Frame Model"
+                                               name="search_frame" class="search_frame form-control"/>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-4">
+                                    <div class="form-group">
+                                        <select id="model_no_selection" name="model_no_selection" class="form-control">
+                                            <option value="">Model Code</option>
+                                            <t t-foreach="model_code" t-as="model_no">
+                                                <option t-att-value="model_no">
+                                                    <t t-esc="model_no"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" type="submit" id="search_number_2">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <form method="get" action="/search">
+                                <div class="col-md-10">
+                                    <t t-set="parts"
+                                       t-value="request.env['product.public.category'].sudo().get_part_list()"/>
+                                    <div class="form-group">
+                                        <select id="product_selection" class="form-control" name="part_number">
+                                            <option value="">Part Number</option>
+                                            <t t-foreach="parts" t-as="part">
+                                                <option t-att-value="part">
+                                                    <t t-esc="part"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" type="submit" id="search_number_3">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="text-align:center">
+                                <a href="/shop" class="btn btn-primary">Catalog of Parts</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+                <hr style="width:100%;float:left"/>
+                <br/>
+                <br/>
+                <div class="container oe_website_sale">
+                    <div class="row">
+                        <div class="col-md-12" id="products_grid">
+                            <t t-foreach="categories" t-as="category">
+                                <div class="col-md-3 oe_product oe_grid oe-height-2"
+                                     t-if="not category.parent_id and category.display_mode == 'normal' or category.display_mode == 'conversion'">
+                                    <div class="oe_product_cart">
+                                        <div class="oe_product_image">
+                                            <t t-if="category.display_mode == 'normal'">
+                                                <a itemprop="url" t-att-href="'/shop/%s' % slug(category)">
+                                                    <span itemprop="image"
+                                                          t-field="category.image"
+                                                          t-options="{'widget': 'image', 'resize': None if product_image_big else '300x300', 'zoom': 'image'}"
+                                                          t-att-alt="category.name"/>
+                                                </a>
+                                            </t>
+                                            <t t-if="category.display_mode == 'conversion'">
+                                                <a itemprop="url" t-att-href="'/shop/%s' % slug(category)"
+                                                   class="conversion_img">
+                                                    <div class="col-md-5"
+                                                         style="padding: 0;height: 100%;text-align: center;display: flex;">
+                                                        <t t-esc="category.image"
+                                                           t-options="{'widget': 'image'}"/>
+                                                    </div>
+                                                    <div class="col-md-2"
+                                                         style="padding: 0;display: flex;align-items: center;height: 100%;">
+                                                        <i class="fa fa-arrow-right"
+                                                           style="z-index: 8;transform: scale(2,1);color: black;margin-left: 15px;"/>
+                                                    </div>
+                                                    <div class="col-md-5"
+                                                         style="padding: 0;height: 100%;text-align: center;display: flex;">
+                                                        <t t-esc="category.image2"
+                                                           t-options="{'widget': 'image'}"/>
+                                                    </div>
+                                                </a>
+                                            </t>
+                                        </div>
+                                        <section>
+                                            <h5>
+                                                <strong>
+                                                    <a itemprop="name"
+                                                       t-att-href="'/shop/%s' % slug(category)"
+                                                       t-att-content=" category.name" t-field="category.name"/>
+                                                </strong>
+                                            </h5>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 oe_product oe_grid" t-if="not category.display_mode == 'normal'">
+                                    <div class="oe_product_cart">
+                                        <h5>
+                                            <strong>
+                                                <a itemprop="name"
+                                                   t-att-href="'/shop/%s' % slug(category)"
+                                                   t-att-content=" category.name" t-field="category.name"/>
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="automobile_row_categ_page">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="category.name"/>
+            <div itemscope="itemscope" itemtype="http://schema.org/Product" id="wrap" class="js_sale">
+                <section
+                        class="container mt8 oe_website_sale"
+                        id="product_detail_category">
+                    <div class="row">
+                        <div class="col-md-12" style="width:auto;">
+                            <ol class="breadcrumb">
+                                <li>
+                                    <a href="/shop">Shop</a>
+                                </li>
+                                <li t-if="category.parent_id.parent_id.parent_id.parent_id">
+                                    <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id.parent_id.parent_id)"
+                                       t-field="category.parent_id.parent_id.parent_id.parent_id.name"/>
+                                </li>
+                                <li t-if="category.parent_id.parent_id.parent_id">
+                                    <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id.parent_id)"
+                                       t-field="category.parent_id.parent_id.parent_id.name"/>
+                                </li>
+                                <li t-if="category.parent_id.parent_id">
+                                    <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id)"
+                                       t-field="category.parent_id.parent_id.name"/>
+                                </li>
+                                <li t-if="category.parent_id">
+                                    <a t-att-href="'/shop/%s' % slug(category.parent_id)"
+                                       t-field="category.parent_id.name"/>
+                                </li>
+                                <li class="active">
+                                    <span t-field="category.name"/>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <section id="forms">
+                            <form class="form-horizontal mt32">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered chart_table">
+                                        <thead>
+                                            <t t-if="search_result">
+                                                <tr>
+                                                    <th style="font-size:11px">Frame Number</th>
+                                                    <th style="font-size:11px">Production Date</th>
+                                                    <th style="font-size:11px">Frame</th>
+                                                </tr>
+                                            </t>
+                                            <t t-if=" not search_result">
+                                                <tr>
+                                                    <th style="font-size:11px">FRAME NO</th>
+                                                    <th style="font-size:11px">MODEL CODE</th>
+                                                    <th style="font-size:11px">CAR NAME</th>
+                                                    <th style="font-size:11px">PRODUCTION FROM</th>
+                                                    <th style="font-size:11px">PRODUCTION TO</th>
+                                                    <th style="font-size:11px">DESTINATION</th>
+                                                    <th style="font-size:11px">DRIVER POSITION</th>
+                                                    <th style="font-size:11px">GRADE</th>
+                                                    <th style="font-size:11px">ENGINE</th>
+                                                    <th style="font-size:11px">TRANSMISSION</th>
+                                                    <th style="font-size:11px">GEAR SHIFT TYPE</th>
+                                                    <th style="font-size:11px">COLOR CODE</th>
+                                                    <th style="font-size:11px">TRIM CODE</th>
+                                                </tr>
+                                            </t>
+                                        </thead>
+                                        <tbody>
+                                            <t t-if="search_result">
+                                                <tr t-foreach="frame_data_lines" t-as="fd_line">
+                                                <td style="font-size:11px">
+                                                    <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                        <span t-esc="search_frame"/>
+                                                    </a>
+                                                </td>
+                                                <td style="font-size:11px">
+                                                    <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                        <span t-field="fd_line.month_range"/>/<span t-field="fd_line.model_year"/>
+                                                    </a>
+                                                </td>
+                                                <td style="font-size:11px">
+                                                    <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                        <span t-field="fd_line.frame_model"/>
+                                                    </a>
+                                                </td>
+                                            </tr>    
+                                            </t>
+                                            <t t-if="not search_result">
+                                                <tr t-foreach="row_categories" t-as="rcid">
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.category_frame"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.model_code"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.car_name"/>
+                                                        </a>
+                                                    </td>
+                                                    
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <t t-if="not search_result">
+                                                                <span t-field="rcid.production_from"/>
+                                                            </t>
+                                                            <t t-if="search_result">
+                                                                <span t-field="rcid.production_from"/>
+                                                            </t>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.production_to"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.destination"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.driver_position"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.grade"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.engine"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.transmission"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.gear_shift_type"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.color_code"/>
+                                                        </a>
+                                                    </td>
+                                                    <td style="font-size:11px">
+                                                        <a t-att-href="'/shop/row/%s' % slug(category)">
+                                                            <span t-field="rcid.trim_code"/>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </section>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="automobile_shop_page">
+        <t t-call="website.layout">
+            <div id="wrap" class="js_sale">
+                <div class="oe_structure"/>
+                <div class="container oe_website_sale">
+                    <div class="products_pager">
+                        <div class="row" style="width: 100%;">
+                            <form method="get" action="/shop" class="pagination form-inline o_website_sale_search">
+                                <div class="input-group">
+                                    <t t-if="parent_category">
+                                        <input type="hidden" t-att-value="parent_category.id" name="parent_category"/>
+                                    </t>
+                                    <div class="oe_search">
+                                        <input type="text" name="search" class="search-query form-control oe_search_box"
+                                               placeholder="Search..." data-oe-model="ir.ui.view" data-oe-id="579"
+                                               data-oe-field="arch" data-oe-xpath="/t[1]/div[1]/div[1]/input[1]"
+                                               value=""/>
+                                    </div>
+                                    <span class="input-group-btn" data-oe-model="ir.ui.view" data-oe-id="579"
+                                          data-oe-field="arch" data-oe-xpath="/t[1]/div[1]/span[1]">
+                                        <button type="submit" class="btn btn-default oe_search_button">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </span>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="width:auto;">
+                            <ol class="breadcrumb">
+                                <li>
+                                    <a href="/shop">shop</a>
+                                </li>
+                                <t t-if="parent_category">
+                                    <li t-if="parent_category.parent_id.parent_id.parent_id.parent_id">
+                                        <a t-att-href="'/shop/%s' % slug(parent_category.parent_id.parent_id.parent_id.parent_id)"
+                                           t-field="parent_category.parent_id.parent_id.parent_id.parent_id.name"/>
+                                    </li>
+                                    <li t-if="parent_category.parent_id.parent_id.parent_id">
+                                        <a t-att-href="'/shop/%s' % slug(parent_category.parent_id.parent_id.parent_id)"
+                                           t-field="parent_category.parent_id.parent_id.parent_id.name"/>
+                                    </li>
+                                    <li t-if="parent_category.parent_id.parent_id">
+                                        <a t-att-href="'/shop/%s' % slug(parent_category.parent_id.parent_id)"
+                                           t-field="parent_category.parent_id.parent_id.name"/>
+                                    </li>
+                                    <li t-if="parent_category.parent_id">
+                                        <a t-att-href="'/shop/%s' % slug(parent_category.parent_id)"
+                                           t-field="parent_category.parent_id.name"/>
+                                    </li>
+                                    <li t-if="parent_category" class="active">
+                                        <a t-att-href="'/shop/%s' % slug(parent_category)"
+                                           t-field="parent_category.name"/>
+                                    </li>
+                                </t>
+                            </ol>
+                        </div>
+                        <div class="col-md-12" id="products_grid">
+                            <t t-foreach="categories" t-as="category">
+                                <div class="col-md-3 oe_product oe_grid oe-height-2"
+                                     t-if="category.display_mode == 'normal' or category.display_mode == 'conversion'">
+                                    <div class="oe_product_cart">
+                                        <div class="oe_product_image">
+                                            <t t-if="category.display_mode == 'normal'">
+                                                <a itemprop="url" t-att-href="'/shop/%s' % slug(category)">
+                                                    <span itemprop="image"
+                                                          t-field="category.image"
+                                                          t-options="{'widget': 'image', 'resize': None if product_image_big else '300x300', 'zoom': 'image'}"
+                                                          t-att-alt="category.name"/>
+                                                </a>
+
+                                            </t>
+                                            <t t-if="category.display_mode == 'conversion'">
+                                                <a itemprop="url" t-att-href="'/shop/%s' % slug(category)"
+                                                   class="conversion_img">
+                                                    <div class="col-md-5"
+                                                         style="padding: 0;height: 100%;text-align: center;display: flex;">
+                                                        <t t-esc="category.image"
+                                                           t-options="{'widget': 'image'}"/>
+                                                    </div>
+                                                    <div class="col-md-2"
+                                                         style="padding: 0;display: flex;align-items: center;height: 100%;">
+                                                        <i class="fa fa-arrow-right"
+                                                           style="z-index: 8;transform: scale(2,1);color: black;margin-left: 15px;"/>
+                                                    </div>
+                                                    <div class="col-md-5"
+                                                         style="padding: 0;height: 100%;text-align: center;display: flex;">
+                                                        <t t-esc="category.image2"
+                                                           t-options="{'widget': 'image'}"/>
+                                                    </div>
+                                                </a>
+                                            </t>
+                                        </div>
+                                        <section>
+                                            <h5>
+                                                <strong>
+                                                    <a itemprop="name"
+                                                       t-att-href="'/shop/%s' % slug(category)"
+                                                       t-att-content=" category.name" t-field="category.name"/>
+                                                </strong>
+                                            </h5>
+                                        </section>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 oe_product oe_grid"
+                                     t-if="not category.display_mode in ['normal','conversion']">
+                                    <div class="oe_product_cart">
+                                        <h5>
+                                            <strong>
+                                                <a itemprop="name"
+                                                   t-att-href="'/shop/%s' % slug(category)"
+                                                   t-att-content=" category.name" t-field="category.name"/>
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="automobile_website_products" inherit_id="website_sale.products">
+        <xpath expr="//div[hasclass('row')][1]" position="inside">
+            <div class="col-sm-12" style="width:auto;">
+                <ol class="breadcrumb" style="text-align: left;">
+                    <li>
+                        <a href="/shop">shop</a>
+                    </li>
+                    <li t-if="category.parent_id" class="active">
+                        <a t-att-href="'/shop/%s' % slug(category.parent_id)"
+                           t-field="category.parent_id.name"/>
+                    </li>
+                    <li t-if="category" class="active">
+                        <a t-att-href="'/shop/%s' % slug(category)"
+                           t-field="category.name"/>
+                    </li>
+                </ol>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="product_details">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="category.name"/>
+            <div itemscope="itemscope" itemtype="http://schema.org/Product" id="wrap" class="js_sale">
+                <section
+                        class="container mt8 oe_website_sale"
+                        id="product_detail_category">
+                    <div class="row">
+                        <div class="col-md-12" style="width:auto;">
+                            <ol class="breadcrumb">
+                                <li>
+                                    <a href="/shop">Shop</a>
+                                </li>
+                                <li t-if="category.parent_id.parent_id.parent_id.parent_id">
+                                    <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id.parent_id.parent_id)"
+                                       t-field="category.parent_id.parent_id.parent_id.parent_id.name"/>
+                                </li>
+                                <li t-if="category.parent_id.parent_id.parent_id">
+                                    <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id.parent_id)"
+                                       t-field="category.parent_id.parent_id.parent_id.name"/>
+                                </li>
+                                <li t-if="category.parent_id.parent_id">
+                                    <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id)"
+                                       t-field="category.parent_id.parent_id.name"/>
+                                </li>
+                                <li t-if="category.parent_id">
+                                    <a t-att-href="'/shop/%s' % slug(category.parent_id)"
+                                       t-field="category.parent_id.name"/>
+                                </li>
+                                <li class="active">
+                                    <span t-field="category.name"/>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <t t-set="main_image"
+                           t-value="request.env['category.image.html'].sudo().search([('category_id','=',category.id)],limit=1,order='id desc').html_data"/>
+                        <t t-if="main_image">
+                            <div class="product-parent-div">
+                                <div class="col-md-12" id="shop_product_image">
+                                    <div id="o-carousel-product" class="carousel slide" data-ride="carousel"
+                                         data-interval="0">
+                                        <div class="carousel-outer">
+                                            <div class="carousel-inner">
+                                                <div class="item active">
+                                                    <t t-raw="main_image"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not main_image">
+                            <div class="col-md-8" id="shop_product_image">
+                                <div id="o-carousel-product" class="carousel slide" data-ride="carousel"
+                                     data-interval="0">
+                                    <div class="carousel-outer">
+                                        <div class="carousel-inner">
+                                            <div class="item active category_image" t-if="not main_image"
+                                                 itemprop="image"
+                                                 t-field="category.image"
+                                                 t-options="{'widget': 'image', 'class': 'product_detail_img', 'alt-field': 'name', 'zoom': 'image'}"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <div class="col-md-2" id="product_details">
+                            <strong style="font-size: 17px;" itemprop="name" t-field="category.name">CategoryName
+                            </strong>
+                            <div class="col-md-12 product_variant_box"
+                                 style="background: dodgerblue;height: 30px;line-height: 30px;">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3">
+                                    <strong>Part Code</strong>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Title</strong>
+                                </div>
+                                <div class="col-md-2">
+                                    <strong>SUBS</strong>
+                                </div>
+                            </div>
+                            <t t-foreach="products" t-as="product">
+                                <div class="col-md-12 product_variant_box" t-att-data="product.id"
+                                     t-attf-id="product_#{product.id}">
+                                    <div class="panel-group wrap" id="accordion" role="tablist" style="margin:0px"
+                                         aria-multiselectable="true">
+                                        <div class="panel">
+                                            <div class="panel-heading" role="tab"
+                                                 t-attf-id="heading_product_box_#{product.id}">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                                       t-attf-href="#panel_product_box_#{product.id}"
+                                                       aria-expanded="false"
+                                                       t-attf-aria-controls="panel_product_box_#{product.id}">
+                                                        <div style="float: left;width: 30%;padding-left: 5px;">
+                                                            <t t-esc="product.display_code"/>
+                                                        </div>
+                                                        <div style="float: left;width: 45%;">
+                                                            <t t-esc="product.name"/>
+                                                        </div>
+                                                        <div style="float:left;width:20%;">
+                                                            <t t-esc="product.subs"/>
+                                                        </div>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div t-attf-id="panel_product_box_#{product.id}"
+                                                 class="panel-collapse collapse" role="tabpanel"
+                                                 t-attf-aria-labelledby="heading_product_box_#{product.id}">
+                                                <div class="panel-body" style="padding:10px;">
+                                                    <div class="col-md-12"
+                                                         style="border: 1px solid lightgray;margin-bottom: 5px;margin-top: 10px;border-radius: 5px;padding:5px;width:98%">
+                                                        <div style="float:left;width:100%;border-bottom:1px solid lightgray">
+                                                            <p style="margin:0px;">
+                                                                Year :
+                                                                <span t-esc="product.model_year"/>
+                                                            </p>
+                                                            <p style="margin:0px;">
+                                                                Description :
+                                                                <span t-esc="product.model_desc"/>
+                                                            </p>
+                                                            <p style="margin-bottom: 5px;">
+                                                                Quantity of Part:
+                                                                <span t-esc="product.part_qty"/>
+                                                            </p>
+                                                            <a style="position: absolute;top: 10px;right: 60px;"
+                                                               t-att-href="'/shop/category/product/%s' % slug(product)">
+                                                                View Product
+                                                            </a>
+                                                        </div>
+                                                        <t t-foreach="product.product_variant_ids" t-as="variant_id">
+                                                            <div class="col-md-12"
+                                                                 style="border-bottom: 1px solid lightgray;width:100%;float:left;padding:5px;">
+                                                                <div class="col-md-7"
+                                                                     style="min-height:unset;padding: 0px;width: 230px;max-width: 230px;">
+                                                                    <div class="col-md-12"
+                                                                         style="padding:0px;min-height:0px;">
+                                                                        <t t-if="variant_id.attribute_value_ids">
+                                                                            <t t-foreach="variant_id.attribute_value_ids"
+                                                                               t-as="value_id">
+                                                                                <span class="badge">
+                                                                                    <t t-esc="value_id.display_name"/>
+                                                                                </span>
+                                                                            </t>
+                                                                        </t>
+                                                                    </div>
+                                                                    <input type="hidden" class="product_id"
+                                                                           name="product_id"
+                                                                           t-att-value="variant_id.id"/>
+                                                                    <div class="col-md-12"
+                                                                         style="padding-left: 0;padding-top:0px;">
+                                                                        <strong>
+                                                                            <span class=" text-mute">
+                                                                                <t t-esc="variant_id.website_price"
+                                                                                   t-options="{'widget': 'monetary',
+                                                                        'display_currency':
+                                                                        website.get_current_pricelist().currency_id,
+                                                                        'from_currency': website.currency_id}"/>
+                                                                            </span>
+                                                                        </strong>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-4"
+                                                                     style="padding: 0;padding-top: 4px;width:25%">
+                                                                    <div class="quantity">
+                                                                        <button class="minus-btn qty_btn"
+                                                                                type="button"
+                                                                                name="button">
+                                                                            <i class="fa fa-minus"/>
+                                                                        </button>
+                                                                        <input type="text" name="qty" class="qty"
+                                                                               value="1"/>
+                                                                        <button class="plus-btn qty_btn"
+                                                                                type="button"
+                                                                                name="button">
+                                                                            <i class="fa fa-plus"/>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-1"
+                                                                     style="padding:0px;left: 25px;bottom: 3px;">
+                                                                    <t t-set="order_id"
+                                                                       t-value="website.sale_get_order()"/>
+                                                                    <t t-if="order_id and variant_id">
+                                                                        <t t-set="line"
+                                                                           t-value="request.env['sale.order.line'].sudo().search([('order_id','=',order_id.id),('product_id','=',variant_id.id)])"/>
+                                                                        <t t-if="not line">
+                                                                            <a id="add_to_cart_variant"
+                                                                               style="padding: 2px 10px;"
+                                                                               class="btn btn-success btn-lg mt8 add_to_cart_variant"
+                                                                               t-att-product-id="variant_id.id">
+                                                                                <i class="fa fa-shopping-cart "/>
+                                                                            </a>
+                                                                        </t>
+                                                                        <t t-if="line">
+                                                                            <a class="btn btn-success btn-lg mt8"
+                                                                               style="padding: 2px 10px;">
+                                                                                <i class="fa fa-check"/>
+                                                                            </a>
+                                                                        </t>
+                                                                    </t>
+                                                                    <t t-if=" not order_id">
+                                                                        <a id="add_to_cart_variant"
+                                                                           style="padding: 2px 10px;"
+                                                                           class="btn btn-success btn-lg mt8 add_to_cart_variant"
+                                                                           t-att-product-id="variant_id.id">
+                                                                            <i class="fa fa-shopping-cart "/>
+                                                                        </a>
+                                                                    </t>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="automobile_product_page">
+        <t t-call="website.layout">
+            <t t-set="additional_title" t-value="product.name"/>
+            <div itemscope="itemscope" id="wrap" class="js_sale">
+                <section class="col-md-12 mt8 oe_website_sale" id="product_detail">
+                    <div class="row">
+                        <div class="col-md-12" style="width:auto;">
+                            <ol class="breadcrumb">
+                                <li>
+                                    <a href="/shop">Shop</a>
+                                </li>
+                                <t t-if="category">
+                                    <li t-if="category.parent_id.parent_id.parent_id.parent_id">
+                                        <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id.parent_id.parent_id)"
+                                           t-field="category.parent_id.parent_id.parent_id.parent_id.name"/>
+                                    </li>
+                                    <li t-if="category.parent_id.parent_id.parent_id">
+                                        <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id.parent_id)"
+                                           t-field="category.parent_id.parent_id.parent_id.name"/>
+                                    </li>
+                                    <li t-if="category.parent_id.parent_id">
+                                        <a t-att-href="'/shop/%s' % slug(category.parent_id.parent_id)"
+                                           t-field="category.parent_id.parent_id.name"/>
+                                    </li>
+                                    <li t-if="category.parent_id">
+                                        <a t-att-href="'/shop/%s' % slug(category.parent_id)"
+                                           t-field="category.parent_id.name"/>
+                                    </li>
+                                    <li>
+                                        <a t-att-href="'/shop/%s' % slug(category)"
+                                           t-field="category.name"/>
+                                    </li>
+                                </t>
+                                <li>
+                                    <span t-field="product.name"/>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-9" style="width:70%">
+                            <span itemprop="image"
+                                  t-attf-content="{{ request.httprequest.url_root }}web/image/product.template/{{ product.id }}/image"
+                                  t-field="product.image"
+                                  t-options="{'widget': 'image', 'class': 'product_detail_img', 'alt-field': 'name', 'zoom': 'image'}"
+                                  groups="!website_sale.group_website_multi_image"/>
+                            <t groups="website_sale.group_website_multi_image">
+                                <t t-set="variant_img" t-value="product.product_variant_id.image_variant"/>
+                                <t t-set="image_ids" t-value="product.product_image_ids"/>
+                                <div id="o-carousel-product" class="carousel slide" data-ride="carousel"
+                                     data-interval="0">
+                                    <div class="carousel-outer">
+                                        <div class="carousel-inner">
+                                            <div t-if="variant_img" class="item active" itemprop="image"
+                                                 t-field="product.product_variant_id.image"
+                                                 t-options="{'widget': 'image', 'class': 'product_detail_img js_variant_img', 'alt-field': 'name', 'zoom': 'image', 'unique': product['__last_update'] + (product.product_variant_id['__last_update'] or '')}"/>
+                                            <div t-attf-class="item#{'' if variant_img else ' active'}" itemprop="image"
+                                                 t-field="product.image"
+                                                 t-options="{'widget': 'image', 'class': 'product_detail_img', 'alt-field': 'name', 'zoom': 'image', 'unique': product['__last_update']}"/>
+                                            <t t-if="len(image_ids)" t-foreach="image_ids" t-as="pimg">
+                                                <div class="item" t-field="pimg.image"
+                                                     t-options='{"widget": "image", "class": "product_detail_img", "alt-field": "name", "zoom": "image" }'/>
+                                            </t>
+                                        </div>
+
+                                        <t t-if="len(image_ids) or variant_img">
+                                            <a class="carousel-control left" href="#o-carousel-product" role="button"
+                                               data-slide="prev">
+                                                <span class="fa fa-chevron-left" aria-hidden="true"/>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control right" href="#o-carousel-product" role="button"
+                                               data-slide="next">
+                                                <span class="fa fa-chevron-right" aria-hidden="true"/>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </t>
+                                    </div>
+
+                                    <ol class="carousel-indicators" t-if="len(image_ids) or variant_img">
+                                        <li data-target="#o-carousel-product"
+                                            data-slide-to="0"
+                                            class="active">
+                                            <img class="img img-responsive"
+                                                 t-attf-src="/website/image/product.template/{{ product.id }}/image/90x90"
+                                                 t-att-alt="product.name"/>
+                                        </li>
+                                        <t t-if="len(image_ids)" t-foreach="image_ids" t-as="pimg">
+                                            <li data-target="#o-carousel-product"
+                                                t-att-data-slide-to="pimg_index + (variant_img and 2 or 1)">
+                                                <img class="img img-responsive"
+                                                     t-attf-src="/website/image/product.image/{{ pimg.id }}/image/90x90"
+                                                     t-att-alt="pimg.name"/>
+                                            </li>
+                                        </t>
+                                    </ol>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="col-sm-3" id="product_details">
+                            <h3 itemprop="name" t-field="product.name">Product Name</h3>
+                            <span itemprop="url" style="display:none;"
+                                  t-esc="'%sshop/product/%s' % (request.httprequest.url_root, slug(product))"/>
+                            <p>
+                                <lable>Part Number:</lable>
+                                <span t-field="product.display_code"/>
+                            </p>
+                            <p>
+                                <lable>PNC Number:</lable>
+                                <span t-field="product.pnc_no"/>
+                            </p>
+                            <p>
+                                <lable>Chases Number:</lable>
+                                <span t-field="product.chases_no"/>
+                            </p>
+                            <p>
+                                <lable>Model:</lable>
+                                <span t-field="product.model"/>
+                            </p>
+                            <p>
+                                <lable>Model Year:</lable>
+                                <span t-field="product.model_year"/>
+                            </p>
+                            <p>
+                                <span t-field="product.model_desc"/>
+                            </p>
+                            <hr/>
+                            <t t-foreach="product.product_variant_ids" t-as="variant_id">
+                                <form action="/shop/cart/update" class="js_add_cart_variants" method="POST">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <div class="js_product" t-if="product">
+                                        <input type="hidden" class="product_id" name="product_id"
+                                               t-att-value="variant_id.id"/>
+                                        <p>
+                                            <strong style="font-size: 12px;">
+                                                <span t-esc="variant_id.display_name"/>
+                                            </strong>
+                                        </p>
+                                        <strong style="font-size: 12px;">
+                                            Price :
+                                            <span t-field="variant_id.website_price"
+                                                  t-options='{
+                                               "widget": "monetary",
+                                               "display_currency": variant_id.currency_id,
+                                           }'/>
+
+                                        </strong>
+                                        <div class="col-md-12" style="margin-top:5px;padding:0;">
+                                            <div class="col-md-6" style="padding:0;width:48%">
+                                                <div class="quantity">
+                                                    <strong>QTY :</strong>
+                                                    <button class="minus-btn qty_btn" type="button"
+                                                            name="button">
+                                                        <i class="fa fa-minus"/>
+                                                    </button>
+                                                    <input type="text" name="add_qty" class="qty" value="1"/>
+                                                    <button class="plus-btn qty_btn" type="button"
+                                                            name="button">
+                                                        <i class="fa fa-plus"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a id="add_to_cart"
+                                                   style="padding-top: 3px;padding-bottom: 3px;margin:0px !important;"
+                                                   class="btn btn-primary btn-lg mt8 js_check_product a-submit"
+                                                   href="#">Add To Cart
+                                                    <i class="fa fa-shopping-cart"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                    </div>
+                                </form>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <template id="automobile_create_image_page">
+        <t t-call="website.layout">
+            <div id="wrap" class="js_sale">
+                <div class="oe_structure"/>
+                <div class="container oe_website_sale">
+                    <div class="row" t-if="category.mapping_image" style="margin-top:10px">
+                        <button class="btn btn-primary" id="copy_btn">Copy</button>
+                        <button class="btn btn-danger" id="reset_btn" style="float:right" t-att-data-id="category.id">
+                            Reset Image
+                        </button>
+                        <t t-if="image_id">
+                            <div class="col-md-12" id="new_image">
+                                <t t-raw="image_id.html_data"/>
+                                <div class="col-md-1 product_variants">
+                                    <t t-foreach="products" t-as="product">
+                                        <t t-if="not request.env['product.image.create'].sudo().search([('product_id', '=', product.id),
+                                                                      ('category_image_id', '=',image_id.id)])">
+                                            <div t-attf-class="col-md-12 draggable_class ui-widget-content product_box_#{product.id}"
+                                                 t-att-variant_id="product.id"
+                                                 t-attf-id="product_box_#{product.id}"
+                                                 t-att-title="product.name" style="background:transparent;">
+                                                <strong>
+                                                    <t t-esc="product.default_code"/>
+                                                </strong>
+                                            </div>
+                                        </t>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="not image_id">
+                            <div class="col-md-12" id="new_image">
+                                <div class="col-md-11 product_image" style="width:800px;">
+                                    <t t-esc="category.mapping_image" t-options="{'widget':'image'}"/>
+                                </div>
+                                <div class="col-md-1 product_variants">
+                                    <div class="row" style="margin:0px">
+                                        <t t-foreach="products" t-as="product">
+                                            <div t-attf-class="col-md-12 draggable_class ui-widget-content product_box_#{product.id}"
+                                                 t-att-variant_id="product.id"
+                                                 t-attf-id="product_box_#{product.id}"
+                                                 t-att-title="product.name" style="background:transparent;">
+                                                <strong>
+                                                    <t t-esc="product.default_code"/>
+                                                </strong>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <hr/>
+                                    <div class="row" style="margin:0px">
+                                        <t t-foreach="category.reference_urls" t-as="url">
+                                            <a t-att-href="url.url">
+                                                <div class="reference_field"
+                                                     style="border: 1px solid lightgray !important;width: 330px;height: 90px;">
+                                                    <t t-esc="url.label"/>
+                                                </div>
+                                            </a>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                        <div class="col-md-2 button">
+                            <input type="hidden" id="category_id" t-att-value="category.id"/>
+                            <button class="btn btn-success" id="create_image">Create Image</button>
+                        </div>
+                    </div>
+                    <div class="row" t-if="not category.image">
+                        <h3>Please add image.</h3>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="automobile_search_page">
+        <t t-call="website.layout">
+            <div id="wrap" class="js_sale">
+                <div class="oe_structure"/>
+                <div class="container oe_website_sale">
+                    <div class="row">
+                        <div class="col-md-12" id="products_grid">
+                            <t t-if="products">
+                                <t t-foreach="products" t-as="product">
+                                    <div class="col-md-3 oe_product oe_grid oe-height-2">
+                                        <div class="oe_product_cart">
+                                            <div class="oe_product_image">
+                                                <a itemprop="url"
+                                                   t-att-href="'/shop/category/product/%s' % slug(product)">
+                                                    <span itemprop="image"
+                                                          t-field="product.image"
+                                                          t-options="{'widget': 'image', 'resize': None if product_image_big else '300x300', 'zoom': 'image'}"
+                                                          t-att-alt="product.name"/>
+                                                </a>
+                                            </div>
+                                            <section>
+                                                <h5>
+                                                    <strong>
+                                                        <a itemprop="name"
+                                                           t-att-href="'/shop/category/product/%s' % slug(product)"
+                                                           t-att-content=" product.name" t-field="product.name"/>
+                                                    </strong>
+                                                </h5>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </t>
+                            </t>
+                            <t t-if="not products">
+                                <h2>No Products Found...</h2>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

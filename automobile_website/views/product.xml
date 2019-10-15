@@ -1,0 +1,124 @@
+<odoo>
+    <record id="automobile_category" model="ir.ui.view">
+        <field name="name">Product Public Category</field>
+        <field name="model">product.public.category</field>
+        <field name="inherit_id" ref="website_sale.product_public_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="image_medium" position="before">
+                <div class="oe_button_box">
+                    <button name="create_image" type="object" class="btn btn-sm oe_stat_button"
+                            attrs="{'invisible':[('display_mode','!=', 'img_mapping')]}">
+                        <i class="fa fa-fw o_button_icon fa-image"/>
+                        Mapping Image
+                    </button>
+                </div>
+            </field>
+            <field name="sequence" position="after">
+                <field name="display_mode"/>
+                <field name="id"/>
+                <field name="is_last_category"/>
+                <field name="is_have_chart"/>
+                <field name="is_car"/>
+                <field name="is_a_car"/>
+            </field>
+            <field name="image_medium" position="attributes">
+                <attribute name="attrs">{'invisible': [('display_mode', '=', 'without_img')]}
+                </attribute>
+            </field>
+            <field name="image_medium" position="after">
+                <group>
+                    <field name="mapping_image"
+                           attrs="{'invisible':[('display_mode','!=', 'img_mapping')]}"/>
+                    <field name="image2"
+                           attrs="{'invisible':[('display_mode','!=','conversion')]}"/>
+                </group>
+            </field>
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Category" attrs="{'invisible': [('display_mode', '!=', 'row')]}">
+                        <field name="row_categ_lines">
+                            <tree editable="bottom">
+                                <field name="categ_id" invisible="1"/>
+                                <field name="category_frame"/>
+                                <!-- <field name="frame_no"/> -->
+                                <field name="model_code"/>
+                                <field name="car_name"/>
+                                <field name="production_from"/>
+                                <field name="production_to"/>
+                                <field name="destination"/>
+                                <field name="driver_position"/>
+                                <field name="grade"/>
+                                <field name="engine"/>
+                                <field name="transmission"/>
+                                <field name="gear_shift_type"/>
+                                <field name="color_code"/>
+                                <field name="trim_code"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Frame Details" attrs="{'invisible': [('is_have_chart', '=', False)]}">
+                        <field name="frame_data_ids">
+                            <tree editable="top">
+                                <field name="e_categ_id" invisible="1"/>
+                                <field name="frame_model"/>
+                                <field name="model_year"/>
+                                <field name="from_frame_no"/>
+                                <field name="to_frame_no"/>
+                                <field name="production_date"/>
+                                <field name="engine"/>
+                                <field name="month_range"/>
+                                <field name="field1"/>
+                                <field name="field2"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Add References" attrs="{'invisible':[('display_mode','!=', 'img_mapping')]}">
+                        <field name="reference_urls">
+                            <tree editable="bottom">
+                                <field name="label"/>
+                                <field name="url"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="automobile_product_template_form" model="ir.ui.view">
+        <field name="name">Product</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="website_sale.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <!-- <field name="public_categ_ids" position="attributes">
+                <attribute name="domain">[('display_mode','=', 'img_mapping')]</attribute>
+                <attribute name="context">{'default_display_mode': 'img_mapping'}</attribute>
+            </field> -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Vehicle">
+                    <group>
+                        <field name="display_code"/>
+                        <field name="pnc_no"/>
+                        <field name="chases_no"/>
+                        <field name="model"/>
+                        <field name="model_year"/>
+                        <field name="model_desc"/>
+                        <field name="subs"/>
+                        <field name="grade"/>
+                        <field name="part_qty"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="automobile_product_form" model="ir.ui.view">
+        <field name="name">Product</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="lst_price" position="after">
+                <field name="description"/>
+            </field>
+        </field>
+    </record>
+</odoo>
