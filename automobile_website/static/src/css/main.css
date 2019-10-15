@@ -1,0 +1,338 @@
+.product_image img {
+    width: 100%;
+    height: 100%;
+}
+
+.product_image {
+    border: 1px solid lightgrey;
+    padding: 0;
+}
+
+.chart_table td {
+    height: 25px !important;
+    line-height: 25px !important;
+    padding: 0px !important;
+}
+
+.chart_table td a {
+    height: 100%;
+    width: 100%;
+    float: left;
+    padding-left: 5px;
+    color: black;
+    text-decoration: none;
+}
+
+.chart_table td a:hover {
+    background: #337ab7;
+    color: white;
+    text-decoration: none;
+}
+
+#new_image {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 10px;
+    border: 1px solid lightgrey;
+}
+
+.col-md-1.product_variants {
+    padding: 0;
+    padding: 5px;
+}
+
+.col-md-12.draggable_class.ui-widget-content {
+    z-index: 1;
+    width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 2px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.product_variant_box {
+    padding: 0px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    border-top: 1px solid gainsboro;
+    min-height: 30px;
+}
+
+.variant_active {
+    background: dodgerblue;
+    box-shadow: 0px 0px 15px 0px dodgerblue;
+}
+
+.variant_active .panel-title a {
+    background: dodgerblue !important;
+}
+
+.variant_active_click {
+    box-shadow: 0px 0px 15px 0px dodgerblue;
+}
+
+.col-md-12.button {
+    height: 200px;
+    text-align: center;
+    padding-top: 20px;
+}
+
+.col-md-12.button button {
+    border-radius: 100%;
+    height: 120px;
+    WIDTH: 120PX;
+    font-size: 16px;
+    text-align: center;
+}
+
+.image_added {
+    height: 0 !important;
+    width: 0 !important;
+    padding: 0 !important;
+}
+
+section#product_detail_category {
+    margin-left: 0px;
+}
+
+#product_details.col-md-2 {
+    float: left;
+    position: absolute;
+    left: 840px;
+    width: auto;
+    overflow: auto;
+}
+
+.category_image img.product_detail_img {
+    width: 80%;
+}
+
+div#shop_product_image {
+    margin-bottom: 20px;
+}
+
+h4.panel-title {
+    cursor: pointer;
+}
+
+#o-carousel-product .carousel-inner div.item {
+    height: 100% !important;
+    text-align: left;
+}
+
+#o-carousel-product .carousel-inner div.item img {
+    margin: 0px !important;
+}
+
+#o-carousel-product .carousel-indicators {
+    text-align: left !important;
+}
+
+#o-carousel-product .carousel-indicators li {
+    margin: 5px !important;
+    width: 100px !important;
+    height: 100px !important;
+}
+
+#o-carousel-product .carousel-indicators {
+    overflow-x: auto;
+}
+
+#search-panel {
+    background-image: url("../search_background.jpeg");
+    height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.panel {
+    border-width: 0 0 1px 0;
+    border-style: solid;
+    border-color: #fff;
+    background: none;
+    box-shadow: none;
+}
+
+.panel:last-child {
+    border-bottom: none;
+}
+
+.panel-group > .panel:first-child .panel-heading {
+    border-radius: 0px;
+}
+
+.panel-group .panel {
+    border-radius: 0;
+}
+
+.panel-group .panel + .panel {
+    margin-top: 0;
+}
+
+.panel-heading {
+    background-color: #009688;
+    border-radius: 0;
+    border: none;
+    color: #fff;
+    padding: 0;
+}
+
+.panel-title a {
+    display: block;
+    color: black;
+    padding: 5px;
+    position: relative;
+    font-size: 15px;
+    font-weight: 400;
+    background: white;
+    border-bottom: 1px solid gainsboro;
+    padding-left: 35px;
+    float: left;
+    width: 100%;
+    line-height: 25px;
+}
+
+.panel-body {
+    background: #fff;
+    padding: 0px !important;
+}
+
+.panel:last-child .panel-body {
+    border-radius: 0px;
+}
+
+.panel:last-child .panel-heading {
+    border-radius: 0px;
+    transition: border-radius 0.3s linear 0.2s;
+}
+
+.panel:last-child .panel-heading.active {
+    border-radius: 0;
+    transition: border-radius linear 0s;
+}
+
+/* #bs-collapse icon scale option */
+
+#bs-collapse .panel-heading a:after {
+    content: '\002B';
+    font-size: 24px;
+    position: absolute;
+    font-family: 'Material Icons';
+    left: 5px;
+    top: 10px;
+    transform: scale(0);
+    transition: all 0.5s;
+}
+
+#bs-collapse .panel-heading.active a:after {
+    content: '\002B';
+    transform: scale(1);
+    transition: all 0.5s;
+}
+
+/* #accordion rotate icon option */
+
+#accordion .panel-heading a:after {
+    content: '\002B';
+    font-size: 20px;
+    position: absolute;
+    font-family: 'Material Icons';
+    right: 94%;
+    top: 8px;
+    transform: rotate(180deg);
+    transition: all 0.5s;
+    border: 1px solid black;
+    border-radius: 55%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 1;
+    color: white;
+    background: black;
+}
+
+#accordion .panel-heading.active a:before {
+    transform: rotate(0deg);
+    transition: all 0.5s;
+}
+
+.image_added div {
+    border: unset !important;
+}
+
+section#product_detail_category {
+    width: 100%;
+    overflow: hidden;
+    padding-left: 15px;
+}
+
+.product-parent-div {
+    float: left;
+}
+
+#product_details.col-md-2 {
+    float: left;
+    position: relative;
+    width: 33%;
+    overflow: auto;
+    left: -10px;
+    padding: 0px;
+    overflow-x: hidden;
+}
+
+.carousel-inner .product_image {
+    border: unset !important;
+}
+
+.quantity input {
+    -webkit-appearance: none;
+    border: none;
+    text-align: center;
+    width: 20px;
+    font-size: 16px;
+    color: #43484D;
+    font-weight: 300;
+}
+
+.qty_btn {
+    width: 30px;
+    height: 30px;
+    background-color: #E1E8EE;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.minus-btn img {
+    margin-bottom: 3px;
+}
+
+.plus-btn img {
+    margin-top: 2px;
+}
+
+button:focus,
+input:focus {
+    outline: 0;
+}
+
+.category_image img.img.img-responsive.product_detail_img {
+    float: left;
+    width: 100%;
+}
+
+.oe_product .oe_product_image .conversion_img img {
+    max-width: 100%;
+    max-height: 100% !important;
+    height: auto !important;
+    float: left;
+}
+
+.col-md-3.oe_product oe_grid {
+    overflow: hidden
+}
