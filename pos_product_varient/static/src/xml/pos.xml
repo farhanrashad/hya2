@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <t t-name="SelectVariantPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-select-variant">
+                <p class="title">
+                    Product Variants                   
+                </p>
+                <div class="content-container container-attribute-list"> 
+                    <t t-foreach="widget.options.products || []" t-as="product">
+                       <span class='wv product' t-att-data-product-id="product.id">
+                            <div class="product-img">
+                                <img t-att-src='widget.get_product_image_url(product)' /> 
+                                <t t-if="!product.to_weight">
+                                    <span class="price-tag">
+                                        <t t-esc="widget.format_currency(product.get_price(widget.options.pricelist, 1),'Product Price')"/>
+                                    </span>
+                                </t>
+                                <t t-if="product.to_weight">
+                                    <span class="price-tag">
+                                        <t t-esc="widget.format_currency(product.get_price(widget.options.pricelist, 1),'Product Price')+'/Kg'"/>
+                                    </span>
+                                </t>
+                            </div>
+                            <div class="product-name">
+                                <t t-esc="product.display_name"/>
+                            </div>
+                        </span>
+                    </t>
+                </div>
+                <div class="content-container container-variant-list">
+                    <t t-foreach="widget.options.alternative || []" t-as="product">
+                       <span class='wv product' t-att-data-product-id="product.id">
+                            <div class="product-img">
+                                <img t-att-src='widget.get_product_image_url(product)' /> 
+                                <t t-if="!product.to_weight">
+                                    <span class="price-tag">
+                                        <t t-esc="widget.format_currency(product.get_price(widget.options.pricelist, 1),'Product Price')"/>
+                                    </span>
+                                </t>
+                                <t t-if="product.to_weight">
+                                    <span class="price-tag">
+                                        <t t-esc="widget.format_currency(product.get_price(widget.options.pricelist, 1),'Product Price')+'/Kg'"/>
+                                    </span>
+                                </t>
+                            </div>
+                            <div class="product-name">
+                                <t t-esc="product.display_name"/>
+                            </div>
+                        </span>
+                    </t>
+                </div>
+                <div class="footer">
+                    <div class="button cancel">
+                        Cancel 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="Template">
+        <span class='product' t-att-data-product-id="product.id">
+            <div class="product-img">
+                <img t-att-src='image_url' /> 
+                <span class="price-tag">
+                    <t t-esc="product.product_variant_count"/> Variants
+                </span>
+            </div>
+            <div class="product-name">
+                <t t-esc="product.name"/>
+            </div>
+        </span>
+    </t>
+</template>
