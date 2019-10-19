@@ -12,13 +12,11 @@
                         <group>
                             <field name="name"/>
                             <field name="parent_id"/>
-							<field name="have_chart"/>
-							<field name="display_mode"/>
                             <!--<field name="website_id" options="{'no_create': True}"
                                    groups="website.group_multi_website"/>-->
                             <field name="sequence"/>
-							<field name="is_have_chart"/>
 							<field name="display_mode"/>
+							<field name="is_have_chart"/>
                         </group>
                     </div>
                     <div class="oe_right">
