@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="e_commerce_ext.product_public_category_form_view_ext" model="ir.ui.view">
+            <field name="name">e_commerce_ext product_public_category_form_view_ext</field>
+            <field name="model">product.public.category</field>
+            <field name="inherit_id" ref="website_sale.product_public_category_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('oe_left')]" position="replace">
+                    <div class="oe_left">
+                        <group>
+                            <field name="name"/>
+                            <field name="parent_id"/>
+                            <!--<field name="website_id" options="{'no_create': True}"
+                                   groups="website.group_multi_website"/>-->
+                            <field name="sequence"/>
+                        </group>
+                    </div>
+                    <div class="oe_right">
+                        <button class="oe_stat_button" name="open_products" type="object" icon="fa-square">
+                            <field name="no_of_products" widget="statinfo" string="Product"/>
+                        </button>
+                    </div>
+                </xpath>
+                <xpath expr="//form/sheet" position="inside">
+                    <notebook>
+                        <page string="Category Line">
+                            <field name="product_public_category_lines">
+                                <tree editable="bottom" create="true">
+                                    <field name="name" readonly="False"/>
+                                    <field name="pnc_number" readonly="False"/>
+                                    <field name="is_linked" readonly="False"/>
+                                    <field name="product_id" readonly="True"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
