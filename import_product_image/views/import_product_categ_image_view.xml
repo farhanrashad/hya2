@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="product_import_image_wizard_form_view" model="ir.ui.view">
+            <field name="name">product.category.import.image.form</field>
+            <field name="model">import.product_categ_image</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Products Category Image Import">
+                    <group>
+                        <group>
+                            <field name="data_file" filename="filename"/>
+                        </group>
+                        <group>
+                            <field name="function"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button class="oe_highlight" string="Import File" name="import_csv_data" type="object"/> or
+                        <button class="oe_link" string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="import_categ_image_action_form" model="ir.actions.act_window">
+            <field name="name">Import Product Image</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.product_categ_image</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    <menuitem
+        name="Import Product Category Image"
+        id="menu_import_product_categ_image" 
+        parent="sale.product_menu_catalog"
+        action="import_categ_image_action_form"
+        sequence="23"/>
+
+    </data>
+</odoo>
