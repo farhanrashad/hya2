@@ -1,0 +1,81 @@
+<odoo>
+    <data>
+        <template id="assets_frontend" inherit_id="website.assets_frontend" name="Wishlist assets frontend">
+            <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/scss" href="/de_theme_modification/static/src/scss/main.scss"/>
+            </xpath>
+        </template>
+        <template id="website_sale_products_item_inherit" inherit_id="website_sale.product" >
+            <xpath expr="//div[@id='product_details']" position="attributes">
+                <attribute name="class">
+                    col-md-6
+                </attribute>
+            </xpath>
+        </template>
+        
+          
+        <template id="website_sale_tiered_pricing_positing_change" inherit_id="website_sale.product_price">
+            <xpath expr="//div[@itemprop='offers']" position="before">
+                <t t-call="product_tiered_pricing.web_pricelist"/>
+            </xpath>
+        </template>
+        
+        <template id="website_sale_tiered_pricing_inherit" inherit_id="product_tiered_pricing.web_pricelist" >
+             <xpath expr="//table" position="attributes">
+                 <attribute name="class">
+                    table
+                </attribute>
+            </xpath>
+        </template>
+        <template id="rating_product" inherit_id="website_sale.product">
+            <xpath expr="//h1[@itemprop='name']" position="after">
+                <div class="product-carousel-user-rating">
+                    <t t-name="website_rating.rating_stars_static">
+                        <t t-set="val_integer"
+                           t-value="round(product.rating_get_stats([('website_published', '=', True)])['avg'])"/>
+                        <t t-set="val_decimal"
+                           t-value="val_integer - product.rating_get_stats([('website_published', '=', True)])['avg']"/>
+                        <t t-set="empty_star" t-value="5 - val_integer"/>
+                        <div class="o_website_rating_static">
+                            <t t-foreach="range(0, val_integer)" t-as="num">
+                                <i class="fa fa-star"/>
+                            </t>
+                            <t t-if="val_decimal">
+                                <i class="fa fa-star-half-o"/>
+                            </t>
+                            <t t-foreach="range(0, empty_star)" t-as="num">
+                                <i class="fa fa-star-o"/>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+<!--       
+        <template id="rating_product" inherit_id="website_sale.product" active="False" customize_show="True" name="Show Product Rating">
+            <xpath expr="//h1[@itemprop='name']" position="after">
+              <t t-call="website_rate_product.show_product_rating"/>
+            </xpath>
+        </template>
+        
+-->        
+        <!-- <template id="listing"> -->
+        <!--   <ul> -->
+        <!--     <li t-foreach="objects" t-as="object"> -->
+        <!--       <a t-attf-href="#{ root }/objects/#{ object.id }"> -->
+        <!--         <t t-esc="object.display_name"/> -->
+        <!--       </a> -->
+        <!--     </li> -->
+        <!--   </ul> -->
+        <!-- </template> -->
+        <!-- <template id="object"> -->
+        <!--   <h1><t t-esc="object.display_name"/></h1> -->
+        <!--   <dl> -->
+        <!--     <t t-foreach="object._fields" t-as="field"> -->
+        <!--       <dt><t t-esc="field"/></dt> -->
+        <!--       <dd><t t-esc="object[field]"/></dd> -->
+        <!--     </t> -->
+        <!--   </dl> -->
+        <!-- </template> -->
+    </data>
+</odoo>

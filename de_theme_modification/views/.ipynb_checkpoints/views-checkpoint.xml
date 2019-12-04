@@ -1,0 +1,70 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record id="view_company_form_inherit" model="ir.ui.view">
+        <field name="name">view.company.form.inherit</field>
+        <field name="model">res.company</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <field name='logo' position='after'>
+                <field name="secondary_logo" widget="image" class="oe_avatar"/>
+            </field>
+        </field>
+    </record>
+      
+    <record id="view_website_form_inherit" model="ir.ui.view">
+        <field name="name">view.website.form.inherit</field>
+        <field name="model">website</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="website.view_website_form"/>
+        <field name="arch" type="xml">
+            <field name='domain' position='after'>
+                <field name="msg" />
+            </field>
+        </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="de_website_header.action_window">
+      <field name="name">de_website_header window</field>
+      <field name="res_model">de_website_header.de_website_header</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="de_website_header.action_server">
+      <field name="name">de_website_header server</field>
+      <field name="model_id" ref="model_de_website_header_de_website_header"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="de_website_header" id="de_website_header.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="de_website_header.menu_1" parent="de_website_header.menu_root"/>
+    <menuitem name="Menu 2" id="de_website_header.menu_2" parent="de_website_header.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="de_website_header.menu_1_list" parent="de_website_header.menu_1"
+              action="de_website_header.action_window"/>
+    <menuitem name="Server to list" id="de_website_header" parent="de_website_header.menu_2"
+              action="de_website_header.action_server"/>
+    -->
+  </data>
+</odoo>
