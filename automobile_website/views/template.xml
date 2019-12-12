@@ -184,14 +184,15 @@
                                     <t t-set="parts"
                                        t-value="request.env['product.public.category'].sudo().get_part_list()"/>
                                     <div class="form-group">
-                                        <select id="product_selection" class="form-control" name="part_number">
+                                        <input type="text" id="search_part_no" placeholder="Search by Part Number" name="part_number" class="search_frame form-control"/>
+										<!-- <select id="product_selection" class="form-control" name="part_number">
                                             <option value="">Part Number</option>
                                             <t t-foreach="parts" t-as="part">
                                                 <option t-att-value="part">
                                                     <t t-esc="part"/>
                                                 </option>
                                             </t>
-                                        </select>
+                                        </select> -->
                                     </div>
                                 </div>
                                 <div class="col-md-2">
