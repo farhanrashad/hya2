@@ -350,7 +350,7 @@ class WebsiteAutomobile(http.Controller):
             domain.append(
                 ('model_year', 'ilike', str(post.get('year_selection'))))
         if post.get('engine_selection'):
-            domain.append(('chases_no', '=', post.get('engine_selection')))
+            domain.append(('engine_no', '=', post.get('engine_selection')))
         if post.get('product_selection'):
             product_pnc = product_template.browse(
                 int(post.get('product_selection')))
