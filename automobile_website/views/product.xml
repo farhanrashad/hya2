@@ -49,7 +49,6 @@
                                 <field name="driver_position"/>
                                 <field name="grade"/>
                                 <field name="engine"/>
-								<field name="chases"/>
                                 <field name="transmission"/>
                                 <field name="gear_shift_type"/>
                                 <field name="color_code"/>
@@ -100,8 +99,7 @@
                     <group>
                         <field name="display_code"/>
                         <field name="pnc_no"/>
-                        <field name="engine_no"/>
-						<field name="chases_no"/>
+                        <field name="chases_no"/>
                         <field name="model"/>
                         <field name="model_year"/>
                         <field name="model_desc"/>

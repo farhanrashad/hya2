@@ -29,7 +29,7 @@ class Website(Website):
 
         # Engine List
         engine_list = filter(None, list(
-            set([x.engine_no for x in product_template_ids])))
+            set([x.chases_no for x in product_template_ids])))
 
         # Model List
         model_list = filter(None, list(
@@ -237,7 +237,7 @@ class WebsiteAutomobile(http.Controller):
             grade_list = [x for x in grade_list]
             # Engine List
             engine_list = filter(None, list(
-                set([x.engine_no for x in products])))
+                set([x.chases_no for x in products])))
             engine_list = [x for x in engine_list]
 
             # Model List
@@ -263,8 +263,8 @@ class WebsiteAutomobile(http.Controller):
             #                 grade_list.append(product.model)
             #             if product.model_year:
             #                 year_list.append(product.model_year)
-            #             if product.engine_no:
-            #                 engine_list.append(product.engine_no)
+            #             if product.chases_no:
+            #                 engine_list.append(product.chases_no)
             # engine_list = set(engine_list)
             # engine_list = list(engine_list)
             # grade_list = set(grade_list)
@@ -350,7 +350,7 @@ class WebsiteAutomobile(http.Controller):
             domain.append(
                 ('model_year', 'ilike', str(post.get('year_selection'))))
         if post.get('engine_selection'):
-            domain.append(('engine_no', '=', post.get('engine_selection')))
+            domain.append(('chases_no', '=', post.get('engine_selection')))
         if post.get('product_selection'):
             product_pnc = product_template.browse(
                 int(post.get('product_selection')))
