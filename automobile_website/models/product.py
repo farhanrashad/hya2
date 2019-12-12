@@ -141,7 +141,6 @@ class ProductTemplate(models.Model):
 
     display_code = fields.Char(string="Part No.")
     pnc_no = fields.Char(string="PNC No.")
-    engine_no = fields.Char(string="Engine No.")
     chases_no = fields.Char(string="Chases No.")
     model = fields.Char(string="Model")
     model_year = fields.Char(string="Model Year")
@@ -181,7 +180,6 @@ class row_category_data(models.Model):
     driver_position = fields.Char(string="DRIVER POSITION")
     grade = fields.Char(string="GRADE")
     engine = fields.Char(string="ENGINE")
-    chases = fields.Char(string="CHASES")
     transmission = fields.Char(string="TRANSMISSION")
     gear_shift_type = fields.Char(string="GEAR SHIFT TYPE")
     color_code = fields.Char(string="COLOR CODE")
