@@ -35,7 +35,7 @@
     <menuitem
         name="Import Product Category Image"
         id="menu_import_product_categ_image" 
-        parent="website_sale.menu_catalog_pricelists"
+        parent="website_sale.menu_catalog"
         action="import_categ_image_action_form"
         sequence="23"/>
 
